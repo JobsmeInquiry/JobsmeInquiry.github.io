@@ -1,0 +1,57 @@
+---
+layout: post
+title: Vue CLI
+image: /yjyoo/vue/vue.jpg
+date: 2020-12-06 17:30:00 +0900
+tags:
+categories: yjyoo
+---
+***
+#### Vue CLI
+
+* vue 개발 환경을 설정해주는 도구
+* Vue CLI 설치하기 위해서, node.js가 설치되어 있어야함.
+* Vue CLI 로 프로젝트 구성하는 순서
+	1) Vue CLI 설치 : npm install -g @vue/cli
+	2) 프로젝트 생성 : vue create my-project (vue@2.X.X, vue init <template-name> <project-name>)
+	3) 뷰 어플리케이션 구동을 위한 라이브러리 다운 : npm install
+	4) 프로젝트 구동 : npm run dev / npm run serve
+	
+> CLI(command line Interface) : command 창에서 명령어로 특정 동작을 수행할 수 있는 도구.
+
+***
+#### Vue Project
+* 폴더 구조
+  * node-modules 폴더 : package.json의 라이브러리 목록으로 다운된 파일 위치함.<br>
+	   (웹팩을 빌드하기 위한 바벨(babel), 여러 가지 로더, 웹팩 데브 서버 등의 라이브러리와 뷰 코어 라이브러리 등)
+  * src 폴더 : .vue 파일을 비롯하여 어플리케이션이 동작하는데 필요한 로직 위치함
+    * index.html : 뷰로 만든 웹 앱의 시작점. npm run dev 실행 시 로딩되는 파일
+    * package.json : npm 설정 파일. 뷰 어플리케이션이 동작하는 데 필요한 라이브러리 정의하는 파일. 프로젝트 정보 & npm 실행 명령어 & 뷰, 웹팩 관련 라이브러리 정보 담고 있음.
+    * package-lock.json : package.json의 snapshot과 같은 파일
+    * webpack.config.js : 웹팩 설정 파일. 웹팩 빌드를 위해 필요한 로직 정의하는 파일
+
+***
+#### Vue Webpack
+* .vue 파일을 웹 브라우저가 인식할 수 있는 형태의 파일로 변환해 주는 모듈 번들러가 필요함. (웹팩이나 브라우저리파이) 
+* 웹팩에 설정된 뷰 로더가 변환 기능을 수행함. (뷰 로더는 웹팩에서 지원하는 라이브러리)
+* 뷰에서 싱글 파일 컴포넌트 체계로 개발시, "뷰 로더(loader)"와 이를 지원하는 "모듈 번들러"가 필요함.
+* Vue Loader : .vue 파일(싱글 파일 컴포넌트)을 브라우저에서 실행할 수 있게 자바스크립트 파일로 변환 (HTML, CSS, 자바스크립트)
+  * 장점
+  1. ES6 지원
+  2. &lt;style&gt; 과 &lt;template&gt; 에 대한 각각의 웹팩 로더 지원. ex) sass, jade
+  3. 각 .vue 컴포넌트의 스코프로 좁힌 css 스타일링 지원
+  4. 웹팩의 모듈 번들링에 대한 지원과 의존성 관리가 제공
+  5. 개발 시 Hot Module Replacement(HMR) 지원
+  * Vue.js를 효과적으로 사용하기 위해서는 플러그인들을 설치
+  1. Prettier - 코드 스타일을 정리해주는 도구 (정렬 등). ESLint에 확장하여 사용할 수도 있음.
+  2. Vetur - 문법강조 및 자동 완성 등 기능 제공
+  3. Vue VSCode Snippets - 자동완성기능 제공
+  4. Material Icon Theme - 아이콘 구분기능 제공
+  5. ESLint - JavaScript 코드스타일, 문법기능 제공. 문법 검사기
+  6. Live Server -  작성한 코드의 웹페이지를 바로 확인해볼 수 있는 기능 제공 (hot reloading)
+  7. Vue VSCode Snippets – VSCode에서 사용 가능한 Vue관련 intellisense 기능. (자동 완성)
+
+***
+##### [참고]
+* Vue CLI: https://simplevue.gitbook.io/intro/01.-vue-cli
+

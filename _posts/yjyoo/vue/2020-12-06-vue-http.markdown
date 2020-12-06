@@ -1,0 +1,24 @@
+---
+layout: post
+title: Vue Http 통신 (axios, vue resource)
+image: /yjyoo/vue/vue.jpg
+date: 2020-12-06 15:07:00 +0900
+tags:
+categories: yjyoo
+---
+#### Vue HTTP 통신
+
+* HTTP 통신 : 웹 앱에서 서버에 데이터를 요청하는 HTTP통신은 필수로 구현해야하는 기능. 동적으로 화면에 데이터 표현 가능.
+* 사용방법 : 1) CDN으로 라이브러리 로딩 2) NPM으로 라이브러리 설치(ES6 기준) 
+
+* 뷰 리소스 : 초기에 코어팀에서 권하던 라이브러리였으나, 2016년 말에 에반 유가 공식적인 지원 중단하기로 결정.(다른 라이브러리와 다르게 Http 통신은 필수적이지 않다 생각했다 함)
+
+* Axios : 가장 많이 사용되는 HTTP 통신 라이브러리. Promise 기반 API 형식이 다양하게 제공되어 별도의 로직 구현 없이도 주어진 API만으로도 사용 가능.
+{% highlight js %}
+axios.get('URL 주소').then().catch();
+또는
+axios.({
+	method: 'get',
+	url: 'URL 주소',
+});
+{% endhighlight %}

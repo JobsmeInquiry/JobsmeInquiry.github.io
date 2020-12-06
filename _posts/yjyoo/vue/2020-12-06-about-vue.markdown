@@ -1,0 +1,65 @@
+---
+layout: post
+title: Vue 시작하기
+image: /yjyoo/vue/vue.jpg
+date: 2020-12-06 15:00:00 +0900
+tags:
+categories: yjyoo
+---
+“더 많은 사람들이 쉽게 웹 앱을 만들 수 있도록 도와주는데 있음” by Evan You
+
+***
+#### Vue 란?
+
+* 웹 페이지 화면을 개발하기 위한 프론트엔드 프레임워크
+* Progressive Framework : 뷰 코어 라이브러리는 화면에 데이터 표현을 위한 기능을 중점적으로 지원하지만, 프레임워크의 기능인 라우터, 상태 관리, 테스팅 등을 쉽게 결합할 수 있음.
+라이브러리 역할 뿐 아니라 프레임워크 역할도 할 수 있다는 의미.
+![]({{site.baseurl}}/images/yjyoo/vue/progressive_framework.jpg)
+
+> - Framework : 개발자들의 개발 생산성을 높이기 위해 일정한 틀과 규칙에 따라 개발하도록 미리 구조를 정의해 놓은 도구
+<br>
+ - Libarary : 자주 사용되는 기능들을 모아 재활용할 수 있도록 정리한 기술 모음
+
+***
+#### Vue 특징
+
+* MVVM 패턴의 뷰 모델에 해당하는 화면단 라이브러리.
+* 컴포넌트 기발 프레임워크. 코드 재사용하기 쉬움. 가독성 향상.
+* 리액트의 장점과 앵귤러의 장점을 가짐
+<br>
+양방향 데이터 바인딩 방식(앵귤러) + 단반향 데이터 흐름&가상 돔(리액트). 
+<br>
+가상돔을 사용하여 특정 돔 요소 추가 또는 삭제시 전체를 다시 그리지 않고 프레임워크에서 정의한 방식에 따라 화면을 갱신함. 
+<br>
+성능 부하를 줄이고, 속도 향상
+![]({{site.baseurl}}/images/yjyoo/vue/mvvm.jpg)
+
+> MVVM패턴 (Model - View - ViewModel) : 마크업 언어나 GUI 코들를 비지니스 로직 또는 백엔드 로직과 분리하여 개발하는 
+   software design pattern. 깔끔한 소스.  가독성 향상.
+
+***
+##### vue가 앵귤러와 리액트보다 배우기 쉬운 이유
+
+* vue가 앵귤러와 리액트보다 배우기 쉽고, 성능도 좋고 빠름.
+* 앵귤러 (양방향 데이터 바인딩 방식, DOM에 직접 접근하지 않고도 데이터 표현 가능) 
+  앵귤러1 (MVC 구조) -> 앵귤러2 (컴포넌트 기반), TypeScript(앵귤러2의 표준, 엄격한 타입 체크), ES6(ECMAScript 2015) 등의 학습 필요.
+* 리액트 (Virtual DOM Rendering, 단방향 데이터 흐름)
+  리엑트 : ES6와 JSX 학습 필요.
+* \+ ES7, Webpack 등 신기술 등장
+
+> - Two-way Data Binding : 화면에 표시되는 값과 프레임워크의 모델 데이터 값이 동기화되어 한쪽이 변경되면 다른 한쪽도 자동으로 변경되는 것.
+<br>
+ - One-way Data Flow : 컴포넌트의 단방향 통신. 컴포넌트간에 데이터 전달은 항상 상위에서 하위로만 전달 가능.
+상위 속성이 업데이트되면 하위로 흐르게 되지만 그 반대는 안됨. 하위 컴포넌트가 실수로 부모의 상태를 변경하여 앱의 데이터 흐름을 추론하기 더 어렵게 만드는 것을 방지할 수 있음.
+<br>
+ - Virtual DOM : 화면을 조작하기 위한 기반 기술. 자바스크립트 객체로 DOM의 모양을 잡아 놓고 화면의 렌더링 횟수를 최소화하여 브라우저의 부하를 줄임.
+<br>
+(화면의 DOM을 추가하거나 삭제하는 등의 변경이 일어날 때 마다 화면을 다시 그리는 것이 아님)
+
+***
+##### [참고]
+* 가이드 : https://kr.vuejs.org/v2/guide/
+* 상태 : https://velog.io/@ljinsk3/JavaScript-%EC%83%81%ED%83%9C%EA%B4%80%EB%A6%AC#%EC%83%81%ED%83%9C-%EA%B4%80%EB%A6%AC%EB%9E%80
+* Vue: https://coding-start.tistory.com/213?category=811388
+* Vue vs React: http://library.gabia.com/contents/infrahosting/8284
+
