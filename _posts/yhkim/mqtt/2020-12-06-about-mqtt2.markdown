@@ -9,6 +9,8 @@ categories: yhkim
 
 #### MQTT는 프로토콜인가?
 
+- MQTT의 정의
+
     ***MQTT is a Client Server publish/subscribe messaging transport protocol.*** 
     It is light weight, open, simple, and designed so as to be easy to implement. 
     These characteristics make it ideal for use in many situations, 
@@ -19,6 +21,8 @@ categories: yhkim
 MQTT 3.1.1 명세에 따르면 MQTT는 PUb/SUB 구조의 메시지 전송 프로토콜이며, TCP/IP 또는 다른 프로토콜을 기반으로 한다. 
 
 #### MQTT의 의미
+
+- MQTT의 의미
 
     ... the primary focus of the protocol has changed from proprietary embedded systems to open Internet of Things (IoT) use cases. 
     This shift in focus has created a lot of confusion about what the acronym MQTT stands for. 
