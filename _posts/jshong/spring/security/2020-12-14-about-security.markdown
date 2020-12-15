@@ -35,15 +35,15 @@ categories: jshong
 
 ![]({{site.baseurl}}/images/jshong/spring/security/authprocess.png)
 
-1. AuthenticationFilter (UsernamePasswordAuthenticationFilter)는 사용자의 요청을 가로챈다. 그리고 인증이 필요한 요청이라면 사용자의JSESSIONID가 Security Context에 있는지 판단한다. 없으면 로그인 페이지로 이동시킨다
+1.AuthenticationFilter (UsernamePasswordAuthenticationFilter)는 사용자의 요청을 가로챈다. 그리고 인증이 필요한 요청이라면 사용자의JSESSIONID가 Security Context에 있는지 판단한다. 없으면 로그인 페이지로 이동시킨다
 로그인 페이지에서 요청이 온 경우라면 로그인 페이지에서 입력받은 username과 password를 이용해 UsernamePasswordAuthenticationToken을 만든다. 그리고 UsernamePasswordAuthenticationToken 정보가 유효한 계정인지 판단하기 위해 AuthenticationManager로 전달한다.
 
 2.AuthenticationManager 인터페이스의 구현체는 ProviderManger이고 AuthencationProvider에게 비밀번호 인증 로직 책임을 넘긴다. (AuthencationProvider는 개발자가 직접 커스텀해서 비밀번호 인증로직을 직접 구현할 수 있다.)
 
-3. AuthencationProvider는 UserDetailsService를 실행해 비밀번호 인증 로직을 처리한다.
+3.AuthencationProvider는 UserDetailsService를 실행해 비밀번호 인증 로직을 처리한다.
 UserDetailsService는 DB에 저장된 회원의 비밀번호와 비교해 일치하면 UserDetails 인터페이스를 구현한 객체를 반환하는데, UserDetailsService는 인터페이스이며 UserDetailsService를 구현한 서비스를 직접 개발해야한다.
 
-4. 인증 로직이 완료되면 AuthenticationManager는 Authentication를 반환하며, 결과적으로 SecurityContext에 사용자 인증 정보가 저장된다.
+4.인증 로직이 완료되면 AuthenticationManager는 Authentication를 반환하며, 결과적으로 SecurityContext에 사용자 인증 정보가 저장된다.
 
-5. 인증 과정이 끝났으면 AuthenticationFilter에게 인증에 대한 성공 유무를 전달하고성공하면 AuthenticationSuccessHandler를 호출하고 실패하면 AuthenticationFailureHandler를 호출한다.
+5.인증 과정이 끝났으면 AuthenticationFilter에게 인증에 대한 성공 유무를 전달하고성공하면 AuthenticationSuccessHandler를 호출하고 실패하면 AuthenticationFailureHandler를 호출한다.
 
