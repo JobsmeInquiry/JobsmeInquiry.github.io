@@ -1,0 +1,384 @@
+---
+layout: post
+title: this, 클로저, let, 화살표 함수, promise 등 (codejong 영상 정리)
+image: /yjyoo/javascript/js.jpg
+date: 2020-12-20 17:00:00 +0900
+tags:
+categories: yjyoo
+---
+CODEJONG(코드종) 유튜브 영상 정리
+
+***
+#### this
+* this : javascript에서 함수의 this는 함수를 호출하는 방법에 의해 결정. 호출한 놈 === THIS
+* bind()로 this를 고정시킬 수 있음. (allow function은 this가 없어서 bind 할 수 없음)
+
+{% highlight js %}
+var someone = {
+    name: 'Yeonjoo',
+    whoAmI: function() {
+        console.log(this);
+    }
+}
+
+console.log('someone.whoAmI() : ');
+someone.whoAmI();
+
+console.log('myWhoAmI() : ');
+var myWhoAmI = someone.whoAmI;
+myWhoAmI();
+
+var btn = document.getElementById('btn');
+btn.addEventListener('click', someone.whoAmI);
+
+console.log('binded() : ');
+var binded = myWhoAmI.bind(someone);
+binded();
+{% endhighlight %}
+
+***
+#### 클로저(Closure)
+
+* 클로저(Closure) : 생성한 시점에 scope chain을 들고 있음. 클로저란 내부함수가 외부함수의 맥락(context: 매개변수, 변수 등)에 접근할 수 있는 경우를 의미.
+* scope chain : scope 끼리 연결되어 있는것. 현재 scope에서 없으면 그 상위에 scope에서 찾음. 하위로 내려 갈 수는 없음.
+* javascript는 함수 단위로 scope 생성됨 (함수 레벨 스코프(Function-level scope))
+* scope는 먼가 찾을 때 사용하는 표 같은 것
+
+{% highlight js %}
+function outer() {
+    var a = 1;
+    var b = 'B';
+    console.log(a);
+
+    function inner() {
+        var a = 2;
+        console.log(a);
+        console.log(b);
+    }
+    
+    inner();
+}
+
+outer();
+{% endhighlight %}
+ - outer() 함수에 선언된 변수는 클로저 때문에, outer() 함수를 return 한 후에도 inner()이 outer(), global을 계속 들고 있어
+ outer()에 scope에 접근 가능함.
+
+***
+##### single thread
+
+* javascript call stack은 하나라 하던 일을 멈추지 못함
+* event loop는 queue를 계속 확인.
+* timer는 WEB API에서 제공하는 것임. (background) (call stack, queue와 별개임)
+* call stack이 비면 (안에 있는 함수가 모두 return 되면), queue에 일이 있다면 event loop가 call stack에 넣어줌.
+예를 들어, setTimeout(()=>{}, 1500); 인 경우 timer는 1.5초 뒤에 queue에 익명 함수를 넣음.
+따라서, 동기적으로 처리하는 일이 1.5초가 걸릴 경우 3초뒤에 실행 되는 것이 아니라 1.5초가 지난 뒤 queue에 setTimeout이 들어가 있으므로 1.5초뒤에 실행됨.
+
+***
+##### let (ES6)
+
+* ES6는 블록 레벨 스코프를 따르는 변수를 선언하기 위해 let 키워드를 제공 . (상수 선언 시 const. 선언된 상수는 변경 불가)
+* 대부분의 프로그래밍 언어는 블록 레벨 스코프(Block-level scope)를 따르지만 자바스크립트는 함수 레벨 스코프(Function-level scope)를 따름
+* 함수 레벨 스코프(Function-level scope)
+1. 함수 내에서 선언된 변수는 함수 내에서만 유효하며 함수 외부에서는 참조할 수 없음. 즉, 함수 내부에서 선언한 변수는 지역 변수이며 함수 외부에서 선언한 변수는 모두 전역 변수.
+2. 블록 레벨 스코프(Block-level scope)
+모든 코드 블록(함수, if 문, for 문, while 문, try/catch 문 등) 내에서 선언된 변수는 코드 블록 내에서만 유효하며 코드 블록 외부에서는 참조할 수 없음. 즉, 코드 블록 내부에서 선언한 변수는 지역 변수.
+
+{% highlight js %}
+for(var i=0; i<3;i++){
+    setTimeout(function(){console.log(i)}, 0);
+}
+>> 3, 3, 3
+for(let i=0; i<3;i++){
+    setTimeout(function(){console.log(i)}, 0);
+}
+>> 0, 1, 2
+{% endhighlight %}
+
+* [예제] babel로 let을 ES로 변경
+{% highlight js %}
+function setClick() {
+  for(let i=0; i<3; i++) {
+    console.log(i);
+  }
+}
+
+* ES6 --(babel 사용)--> ES5
+function setClick() {
+  var _loop = function _loop(i) {
+    console.log(i);
+  };
+  
+  for (var i=0; i < 3; i++) {
+    _loop(i);
+  }
+}
+{% endhighlight %}
+* for문에서 let 블럭에서 i++이 되는 이유? 
+  let은 블록 레벨 스코프(Block-level scope) 이지만, for문에 한정하여 값을 변수로 하여 전달함. 
+
+***
+##### callback 함수
+
+* 콜백 함수 : 나중에 실행하라고 인자로 넘기는 함수. (1급 함수)
+{% highlight js %}
+function fakeSetTimeout(callback, delay) {
+    callback();
+}
+
+console.log(0);
+
+// 동기적
+fakeSetTimeout(function() {
+    console.log('fake setTimeout!');
+}, 0);
+
+// 비동기적
+setTimeout(function() {
+    console.log('real setTimeout!');
+}, 0);
+
+console.log(1);
+{% endhighlight %}
+
+* 1급 시민 : 다른 함수에 인자로 넣을 수 있고, return 값으로 넣을 수 있고, 변수에 담을 수 있음.
+{% highlight js %}
+// 변수에 할당 가능
+var a = function (num) { return num * num }
+}
+// 매개변수로 함수를 전달
+function b (fun) {
+  var num = fun(10)
+  // return 값으로 함수 사용 가능
+  return function (num2) {
+    var num2 = num2 || 2
+    return num * num2
+  }
+}
+{% endhighlight %}
+
+***
+#### 화살표 함수(Allow Function)
+* allow function에 없는 것 : 함수 이름, this, arguments가 없음.
+* 코드를 간결. this를 받지 않아도 되는 경우 사용.
+
+- this가 없음
+1. bind 할 수 없음 : allow function scope상에 this가 없고, function이 선언된 위치 scope의 this를 쓰게 됨.
+2. 함수를 생성자로서 인스턴스를 만들 수 있는데, this가 하나의 object로 생성이 되는 건데, 화살표 함수는 new 연산자로 생성자 만들 수 없음. prototype도 존재하지 않음
+- arguments 없음 => 전개 연산자(...) : 배열로 묶어서 받음
+
+{% highlight js %}
+const btnAllow = document.getElementById('btn-allow');
+const btnAllow2 = document.getElementById('btn-allow2');
+const btnAllow3 = document.getElementById('btn-allow3');
+
+var myObj = {
+    count: 0,
+    getCount: function() {
+        console.log(this.count);
+        btnAllow.addEventListener('click', function(){
+            console.log(this);
+        });
+        btnAllow2.addEventListener('click', (function(){
+            console.log(this);
+        }).bind(this));
+    },
+    addCount: function() {
+        btnAllow3.addEventListener('click', () => {
+            document.getElementById('count').innerText = ++this.count;
+            console.log(this); // bind 없이도 myObj의 this 사용함.
+        });
+    }
+}
+
+myObj.getCount();
+myObj.addCount();
+document.getElementById('count').innerText = myObj.count;
+
+const MyObj = function() {};
+new MyObj();
+
+const MyObj2 = () => {};
+//new MyObj2(); // MyObj2 is not a constructor
+
+const MyObj3 = function() {
+    console.log(arguments);
+};
+MyObj3(1,2,3);
+
+const MyObj4 = () => {
+    console.log(arguments);
+};
+//MyObj4(1,2,3); // arguments is not defined at MyObj4
+
+function MyObj5() {
+    const MyObj6 = () => {
+        console.log(arguments);
+    };
+    MyObj6();
+}
+MyObj5(4,5,6);
+
+const MyObj7 = (...args) => {
+    console.log(args);
+};
+MyObj7(7,8,9);
+{% endhighlight %}
+
+***
+#### Promise & async / await
+
+* Promise : 자바스크립트 비동기 처리에 사용되는 객체. 주로 서버에서 받아온 데이터를 화면에 표시할 때 사용
+* Promise 인스턴스 만들어 사용함 (return new Promise((resolve, reject) => {}); )
+* 성공시 resolve로 넘어가고, 실패시 reject로 넘어감.
+* return 값이 없으면 then 으로 resolve값 받을 때 undefined 나옴.
+* return XXX 값으로 임의의 값 넘길 수 도 있음.
+{% highlight js %}
+function delay(sec, callback) {
+    setTimeout(() => {
+        callback(new Date().toISOString());
+    }, sec * 1000)
+}
+
+function delayP(sec) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(new Date().toISOString());
+        }, sec * 1000)
+    });
+}
+//------------------------------//
+// 1 초 간격으로 찍기 시도 => 실패! 모두다 1초에 실행됨.
+delay(1, (result) => {
+    console.log(1, result);
+});
+
+delay(1, (result) => {
+    console.log(2, result);
+});
+
+delay(1, (result) => {
+    console.log(3, result);
+});
+
+//------------------------------//
+// 1 초 간격으로 찍기 시도 => 실행은 되지만 보기 어려움.
+delay(1, (result) => {
+    console.log(4, result);
+    
+    delay(1, (result) => {
+
+        delay(1, (result) => {
+            console.log(6, result);
+        });
+
+        console.log(5, result);
+    });
+});
+
+//------------------------------//
+// Promise 사용하여 1초마다 찍도록하기
+delayP(1)
+.then((result) => {
+    console.log(7, result);
+    return delayP(1);
+}).then((result) => {
+    console.log(8, result);
+    return delayP(1);
+}).then((result) => {
+    console.log(9, result);
+}).then((result) => {
+    console.log(10, result);
+    return 'wow';
+}).then((result) => {
+    console.log(11, result);
+})
+{% endhighlight %}
+
+* async / await : 기존의 비동기 처리 방식인 콜백 함수와 프로미스의 단점을 보완하고 개발자가 읽기 좋은 코드를 작성할 수 있게 도와줌
+async function XX() {	await fct()}
+* async는 Promise를 return 하는 함수로 만들어 줌 -> then을 쓸 수 있음.
+{% highlight js %}
+function delayP(sec) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve(new Date().toISOString());
+        }, sec * 1000)
+    });
+}
+
+function myFunc() {
+    return 'myFunc';
+}
+
+async function myAsync() {
+    const normal = await myFunc();
+    console.log(normal);
+
+    const time = await delayP(3);
+    console.log(time);
+
+    const val = await delayP(3).then((result)=>{
+        return 'RETURN';
+    });
+    console.log(val);
+
+    return 'myAsync';
+}
+
+//console.log(myFunc());
+//console.log(myAsync());
+//console.log(delayP());
+
+console.log('start ', new Date().toISOString());
+myAsync().then((result) => {
+    console.log('result ' + result);
+    console.log('end ', new Date().toISOString());
+});
+{% endhighlight %}
+
+* promise에 error는 비동기 이기 때문에 try catch에서 잡히지 않음 > .catch() 써야함. chain도 가능. catch 안에서 throw로 넘겨야 함.
+* new Error 객체는 에러 메세지 + 정보를 담고 있음.
+
+***
+#### git 용어 정리
+
+* 깃 : 소스코드 관리에 사용
+* SHA1  알고리즘에 의한 hash값(중복되지 않은 임의의 문자열)을 시리얼 넘버로 사용함.
+* 문자열만 보고 순서를 알 수 없음. 부모의 Hash값을 가지고 있음.
+* 왜 git은 commit id로 번호가 아닌 hash값을 사용하나? 깃은 분산버선 관리 시스템. 언제 어디서든 commit 가능. 서버에 최신 번호 확인 불필요! 오프라인에서 commit 가능함.
+* Hash는 중복이 안 되나? SHA1의 중복 발생 수학적 확률 (1 / 2^80)
+* branch, tag, HEAD 모두 pointer
+* 용어
+1. working directory : 프로젝트 위치. 하드디스크에 작업 공간
+2. commit : 현재 working directory의 snapshot을 사진첩에 넣는 행위
+3. git repository : 사진첩 (local, remote)
+
+* working directory가 한 번도 커밋이 되지 않은 경우 untracked
+* 커밋 하면 master와 HEAD가 생성됨.
+* master 가장 기본이 되는 branch. HEAD는 현재 커밋이 무엇인지 알려주는 pointer
+
+* 명령어
+git init : repository 생성
+echo "얼굴" > face.txt : 파일 생성
+git status
+git add : stage에 올리기. commit을 준비하는 공간.
+git commit -m "first commit"
+git log
+cd .git
+cat HEAD
+cat refs/head/master
+git tag v1.0
+git branch [브랜치 이름] : tag나 branch를 할 때 굉장히 간단함. 40byte 데이터를 가진 파일(참조하는 hash값을 가진) 하나 만들기
+git checkout [브랜치 이름] : HEAD값 ref/master -> ref/youndu로 바뀜
+
+* HEAD 현재 branch가 가르키는 hash값을 가르킴
+* HEAD 현재 기준이 되는 commit을 가르키기 위해서, 현재 branch가 뭔지
+* branch 어떤 작업에 가지 가장 최근에 commit을 가르킴
+* tag는 값이 바뀌지 않음 (삭제 후 새로 만들기는 가능, 수정은 안 됨) 왜냐하면, 배포를 위함
+
+***
+##### [참고]
+* CODEJONG : https://www.youtube.com/channel/UC9hWQRe4QrUivXN3VO2iuMA
+* JavaScript 참고자료 : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/
+* Promise : https://joshua1988.github.io/web-development/javascript/promise-for-beginners/
